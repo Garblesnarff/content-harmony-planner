@@ -15,6 +15,12 @@ const Layout = () => {
           <li>
             <Link to="/monthly-goal" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Monthly Goal</Link>
           </li>
+          <li>
+            <Link to="/calendar" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Calendar</Link>
+          </li>
+          <li>
+            <Link to="/weekly" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Weekly View</Link>
+          </li>
         </ul>
       </nav>
       <main className="flex-1 overflow-y-auto">

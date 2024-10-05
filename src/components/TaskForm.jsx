@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const TaskForm = ({ onAddTask }) => {
+const TaskForm = ({ onAddTask, initialDate }) => {
   const [task, setTask] = useState({
     title: '',
-    dueDate: '',
+    dueDate: initialDate || '',
     contentType: '',
     priority: ''
   });
@@ -18,8 +18,8 @@ const TaskForm = ({ onAddTask }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddTask(task);
-    setTask({ title: '', dueDate: '', contentType: '', priority: '' });
+    onAddTask({ ...task, id: Date.now() });
+    setTask({ title: '', dueDate: initialDate || '', contentType: '', priority: '' });
   };
 
   return (

@@ -1,14 +1,25 @@
-import { HomeIcon } from "lucide-react";
-import Index from "./pages/Index.jsx";
+import { LayoutDashboard, CalendarDays, Target } from "lucide-react";
+import Dashboard from "./pages/Dashboard";
+import TaskManagement from "./pages/TaskManagement";
+import MonthlyGoal from "./pages/MonthlyGoal";
 
-/**
- * Central place for defining the navigation items. Used for navigation components and routing.
- */
 export const navItems = [
   {
-    title: "Home",
+    title: "Dashboard",
     to: "/",
-    icon: <HomeIcon className="h-4 w-4" />,
-    page: <Index />,
+    icon: <LayoutDashboard className="h-4 w-4" />,
+    page: <Dashboard />,
+  },
+  {
+    title: "Task Management",
+    to: "/tasks",
+    icon: <CalendarDays className="h-4 w-4" />,
+    page: <TaskManagement />,
+  },
+  {
+    title: "Monthly Goal",
+    to: "/monthly-goal",
+    icon: <Target className="h-4 w-4" />,
+    page: <MonthlyGoal />,
   },
 ];

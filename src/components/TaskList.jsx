@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const TaskList = ({ tasks, onUpdateTask, onDeleteTask }) => {
@@ -20,21 +20,23 @@ const TaskList = ({ tasks, onUpdateTask, onDeleteTask }) => {
   return (
     <div className="space-y-4">
       {tasks.map((task) => (
-        <Card key={task.id}>
+        <Card key={task.id} className="overflow-hidden">
+          <CardHeader className="bg-gray-50">
+            <CardTitle className="text-lg">{task.description}</CardTitle>
+          </CardHeader>
           <CardContent className="pt-4">
-            <h3 className="font-semibold">{task.description}</h3>
-            <div className="flex space-x-2 mt-2">
-              <Badge>{task.content_type}</Badge>
+            <div className="flex space-x-2 mb-2">
+              <Badge variant="secondary">{task.content_type}</Badge>
               <Badge className={getPriorityColor(task.priority)}>{task.priority}</Badge>
+              <Badge variant="outline">{task.status}</Badge>
             </div>
-            <p className="text-sm text-gray-600 mt-2">Status: {task.status}</p>
             <p className="text-sm text-gray-600">Due: {task.due_date ? new Date(task.due_date).toLocaleDateString() : 'Not set'}</p>
             <p className="text-sm text-gray-600">Created: {new Date(task.created_at).toLocaleString()}</p>
             {task.completed_at && (
               <p className="text-sm text-gray-600">Completed: {new Date(task.completed_at).toLocaleString()}</p>
             )}
           </CardContent>
-          <CardFooter className="flex justify-between">
+          <CardFooter className="bg-gray-50 justify-between">
             <Button 
               variant="outline" 
               onClick={() => onUpdateTask({ ...task, status: task.status === 'completed' ? 'pending' : 'completed' })}

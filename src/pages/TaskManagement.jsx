@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTasks, useAddTask, useUpdateTask, useDeleteTask } from '../integrations/supabase';
+import { useTasks, useAddTask, useUpdateTask, useDeleteTask } from '../integrations/supabase/hooks/useTasks';
 import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
 import { useToast } from "@/components/ui/use-toast";

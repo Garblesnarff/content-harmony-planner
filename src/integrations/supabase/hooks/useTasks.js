@@ -14,6 +14,9 @@ const fromSupabase = async (query) => {
 |--------------|--------------------------|-----------|----------|
 | id           | integer                  | integer   | true     |
 | description  | text                     | string    | true     |
+| content_type | text                     | string    | false    |
+| priority     | text                     | string    | false    |
+| due_date     | date                     | string    | false    |
 | agent_id     | integer                  | integer   | false    |
 | status       | text                     | string    | true     |
 | created_at   | timestamp with time zone | string    | false    |

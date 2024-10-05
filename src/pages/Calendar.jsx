@@ -4,34 +4,81 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import TaskForm from '../components/TaskForm';
+import { useTasks, useAddTask, useUpdateTask, useDeleteTask } from '../integrations/supabase/hooks/useTasks';
+import { useToast } from "@/components/ui/use-toast";
 
 const CalendarPage = () => {
   const [date, setDate] = useState(new Date(2024, 9, 5)); // October 5th 2024
-  const [tasks, setTasks] = useState({});
+  const { data: tasks, isLoading, isError } = useTasks();
+  const addTaskMutation = useAddTask();
+  const updateTaskMutation = useUpdateTask();
+  const deleteTaskMutation = useDeleteTask();
+  const { toast } = useToast();
 
-  const handleAddTask = (newTask) => {
-    const taskDate = new Date(newTask.dueDate).toDateString();
-    setTasks(prevTasks => ({
-      ...prevTasks,
-      [taskDate]: [...(prevTasks[taskDate] || []), newTask]
-    }));
+  const handleAddTask = async (newTask) => {
+    try {
+      await addTaskMutation.mutateAsync(newTask);
+      toast({
+        title: "Task added",
+        description: "Your new task has been added successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to add the task. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleRemoveTask = (taskDate, taskId) => {
-    setTasks(prevTasks => ({
-      ...prevTasks,
-      [taskDate]: prevTasks[taskDate].filter(task => task.id !== taskId)
-    }));
+  const handleUpdateTask = async (updatedTask) => {
+    try {
+      await updateTaskMutation.mutateAsync(updatedTask);
+      toast({
+        title: "Task updated",
+        description: "The task has been updated successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update the task. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      await deleteTaskMutation.mutateAsync(taskId);
+      toast({
+        title: "Task deleted",
+        description: "The task has been deleted successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete the task. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getTasksForDate = (date) => {
+    if (!tasks) return [];
+    return tasks.filter(task => {
+      const taskDate = new Date(task.due_date);
+      return taskDate.toDateString() === date.toDateString();
+    });
   };
 
   const renderTasksForDate = (date) => {
-    const tasksForDate = tasks[date.toDateString()] || [];
+    const tasksForDate = getTasksForDate(date);
     return (
       <div className="mt-2">
         {tasksForDate.map(task => (
           <div key={task.id} className="flex justify-between items-center mb-1">
-            <span>{task.title}</span>
-            <Button variant="destructive" size="sm" onClick={() => handleRemoveTask(date.toDateString(), task.id)}>Remove</Button>
+            <span>{task.description}</span>
+            <Button variant="destructive" size="sm" onClick={() => handleDeleteTask(task.id)}>Remove</Button>
           </div>
         ))}
         <Dialog>
@@ -48,6 +95,9 @@ const CalendarPage = () => {
       </div>
     );
   };
+
+  if (isLoading) return <div>Loading tasks...</div>;
+  if (isError) return <div>Error loading tasks. Please try again.</div>;
 
   return (
     <div className="p-6">

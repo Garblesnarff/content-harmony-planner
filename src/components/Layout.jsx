@@ -14,28 +14,28 @@ const Layout = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <nav className="w-64 bg-white shadow-md">
-        <div className="p-4">
-          <h1 className="text-2xl font-bold text-gray-800">Content Harmony</h1>
+    <div className="flex h-screen bg-gradient-radial from-blue-100 to-purple-100">
+      <nav className="w-64 bg-white shadow-xl">
+        <div className="p-4 gradient-bg">
+          <h1 className="text-2xl font-bold text-white">Content Harmony</h1>
         </div>
         <ul className="space-y-2 py-4">
           {navItems.map((item) => (
             <li key={item.to}>
               <Link
                 to={item.to}
-                className={`flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-200 ${
+                className={`flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-100 hover-glow ${
                   location.pathname === item.to ? 'bg-gray-200 font-semibold' : ''
                 }`}
               >
-                {item.icon}
+                <span className="icon-hover">{item.icon}</span>
                 <span>{item.label}</span>
               </Link>
             </li>
           ))}
         </ul>
       </nav>
-      <main className="flex-1 overflow-y-auto bg-gray-50 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         <Outlet />
       </main>
     </div>

@@ -43,16 +43,16 @@ const WeeklyPage = () => {
   const renderTasksForDate = (date) => {
     const tasksForDate = tasks[date.toDateString()] || [];
     return (
-      <div className="mt-2">
+      <div className="mt-2 space-y-2">
         {tasksForDate.map(task => (
-          <div key={task.id} className="flex justify-between items-center mb-1">
-            <span>{task.title}</span>
-            <Button variant="destructive" size="sm" onClick={() => handleRemoveTask(date.toDateString(), task.id)}>Remove</Button>
+          <div key={task.id} className="flex justify-between items-center p-2 bg-white rounded-md shadow hover:shadow-md transition-shadow">
+            <span className="text-sm">{task.title}</span>
+            <Button variant="destructive" size="sm" onClick={() => handleRemoveTask(date.toDateString(), task.id)} className="hover-glow">Remove</Button>
           </div>
         ))}
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" size="sm">Add Task</Button>
+            <Button variant="outline" size="sm" className="w-full hover-glow">Add Task</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -66,14 +66,14 @@ const WeeklyPage = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Weekly View</h1>
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Weekly View</h1>
       <div className="grid grid-cols-7 gap-4">
         {currentWeek.map((date, index) => (
-          <Card key={index}>
-            <CardContent>
-              <h2 className="text-lg font-semibold mb-2">{date.toLocaleDateString('en-US', { weekday: 'short' })}</h2>
-              <p className="text-sm mb-2">{date.toLocaleDateString()}</p>
+          <Card key={index} className="overflow-hidden card-hover">
+            <CardContent className="p-4">
+              <h2 className="text-lg font-semibold mb-2 text-primary">{date.toLocaleDateString('en-US', { weekday: 'short' })}</h2>
+              <p className="text-sm mb-2 text-gray-600">{date.toLocaleDateString()}</p>
               {renderTasksForDate(date)}
             </CardContent>
           </Card>

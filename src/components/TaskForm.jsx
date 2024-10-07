@@ -7,15 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DatePicker } from "@/components/ui/date-picker";
 
 const TaskForm = ({ onAddTask, initialDate }) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
   const form = useForm({
     defaultValues: {
       description: '',
       content_type: '',
       priority: '',
-      due_date: initialDate && new Date(initialDate) >= today ? new Date(initialDate) : today,
+      due_date: initialDate ? new Date(initialDate) : new Date(),
       due_time: '12:00',
     },
   });
@@ -24,11 +21,6 @@ const TaskForm = ({ onAddTask, initialDate }) => {
     const combinedDateTime = new Date(data.due_date);
     const [hours, minutes] = data.due_time.split(':');
     combinedDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
-
-    if (isNaN(combinedDateTime.getTime()) || combinedDateTime < today) {
-      form.setError('due_date', { type: 'manual', message: 'Due date must be today or a future date' });
-      return;
-    }
 
     onAddTask({
       description: data.description,
@@ -108,8 +100,7 @@ const TaskForm = ({ onAddTask, initialDate }) => {
               <FormLabel>Due Date</FormLabel>
               <DatePicker
                 date={field.value}
-                onDateChange={(date) => field.onChange(date >= today ? date : today)}
-                disabled={(date) => date < today}
+                onDateChange={field.onChange}
               />
               <FormMessage />
             </FormItem>

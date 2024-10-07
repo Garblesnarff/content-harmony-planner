@@ -13,15 +13,20 @@ const TaskForm = ({ onAddTask, initialDate }) => {
       content_type: '',
       priority: '',
       due_date: initialDate || new Date(),
+      due_time: '12:00',
     },
   });
 
   const onSubmit = (data) => {
+    const combinedDateTime = new Date(data.due_date);
+    const [hours, minutes] = data.due_time.split(':');
+    combinedDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+
     onAddTask({
       description: data.description,
       content_type: data.content_type,
       priority: data.priority,
-      due_date: data.due_date,
+      due_date: combinedDateTime.toISOString(),
       status: 'pending',
     });
     form.reset();
@@ -101,6 +106,21 @@ const TaskForm = ({ onAddTask, initialDate }) => {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="due_time"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Due Time</FormLabel>
+              <FormControl>
+                <Input type="time" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit">Add Task</Button>
       </form>
     </Form>

@@ -8,7 +8,7 @@ import { useTasks, useAddTask, useUpdateTask, useDeleteTask } from '../integrati
 import { useToast } from "@/components/ui/use-toast";
 
 const CalendarPage = () => {
-  const [date, setDate] = useState(new Date(2024, 9, 5)); // October 5th 2024
+  const [date, setDate] = useState(new Date());
   const { data: tasks, isLoading, isError } = useTasks();
   const addTaskMutation = useAddTask();
   const updateTaskMutation = useUpdateTask();
@@ -110,6 +110,7 @@ const CalendarPage = () => {
               selected={date}
               onSelect={setDate}
               className="rounded-md border"
+              initialFocus
             />
           </CardContent>
         </Card>

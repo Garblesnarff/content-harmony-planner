@@ -12,6 +12,13 @@ const DayPlanner = ({ tasks }) => {
     return hour <= 12 ? `${hour}:00 AM` : `${hour - 12}:00 PM`;
   });
 
+  const getTasksForTime = (time) => {
+    return tasks.filter(task => {
+      const taskTime = new Date(task.due_date).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+      return taskTime === time;
+    });
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -46,7 +53,11 @@ const DayPlanner = ({ tasks }) => {
               {timeSlots.map((time, index) => (
                 <div key={index} className="flex">
                   <div className="w-1/4 text-sm">{time}</div>
-                  <div className="w-3/4 border-b"></div>
+                  <div className="w-3/4 border-b">
+                    {getTasksForTime(time).map(task => (
+                      <div key={task.id} className="text-sm">{task.description}</div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>

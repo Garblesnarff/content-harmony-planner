@@ -65,15 +65,18 @@ const WeeklyPage = () => {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Weekly View</h1>
       <div className="grid grid-cols-7 gap-4">
-        {currentWeek.map((date, index) => (
-          <Card key={index} className={`overflow-hidden card-hover ${date < today ? 'opacity-50' : ''}`}>
-            <CardContent className="p-4">
-              <h2 className="text-lg font-semibold mb-2 text-primary">{date.toLocaleDateString('en-US', { weekday: 'short' })}</h2>
-              <p className="text-sm mb-2 text-gray-600">{date.toLocaleDateString()}</p>
-              {renderTasksForDate(date)}
-            </CardContent>
-          </Card>
-        ))}
+        {currentWeek.map((date, index) => {
+          const isPastDate = date < new Date(new Date().setHours(0, 0, 0, 0));
+          return (
+            <Card key={index} className={`overflow-hidden card-hover ${isPastDate ? 'opacity-50' : ''}`}>
+              <CardContent className="p-4">
+                <h2 className="text-lg font-semibold mb-2 text-primary">{date.toLocaleDateString('en-US', { weekday: 'short' })}</h2>
+                <p className="text-sm mb-2 text-gray-600">{date.toLocaleDateString()}</p>
+                {renderTasksForDate(date)}
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

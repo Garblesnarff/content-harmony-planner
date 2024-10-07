@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTasks } from '../integrations/supabase/hooks/useTasks';
+import DayPlanner from '../components/DayPlanner';
 
 const Dashboard = () => {
   const { data: tasks, isLoading, isError } = useTasks();
@@ -14,7 +15,7 @@ const Dashboard = () => {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Content Calendar Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Total Tasks</CardTitle>
@@ -40,6 +41,7 @@ const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
+      <DayPlanner tasks={tasks} />
     </div>
   );
 };

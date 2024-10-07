@@ -18,9 +18,16 @@ const TaskForm = ({ onAddTask, initialDate }) => {
   });
 
   const onSubmit = (data) => {
+    const now = new Date();
     const combinedDateTime = new Date(data.due_date);
     const [hours, minutes] = data.due_time.split(':');
     combinedDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+
+    // Ensure the due date is not in the past
+    if (combinedDateTime < now) {
+      form.setError('due_date', { type: 'manual', message: 'Due date cannot be in the past' });
+      return;
+    }
 
     onAddTask({
       description: data.description,
@@ -101,6 +108,7 @@ const TaskForm = ({ onAddTask, initialDate }) => {
               <DatePicker
                 date={field.value}
                 onDateChange={field.onChange}
+                disabled={(date) => date < new Date()}
               />
               <FormMessage />
             </FormItem>

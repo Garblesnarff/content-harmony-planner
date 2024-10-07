@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { format } from 'date-fns';
 
 const TaskCard = ({ task }) => {
   const getPriorityColor = (priority) => {
@@ -16,9 +17,9 @@ const TaskCard = ({ task }) => {
     }
   };
 
-  const formatTime = (dateString) => {
+  const formatDateTime = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return format(date, 'MMM d, yyyy h:mm a');
   };
 
   return (
@@ -32,10 +33,10 @@ const TaskCard = ({ task }) => {
           <Badge className={getPriorityColor(task.priority)}>{task.priority}</Badge>
           <Badge variant="outline">{task.status}</Badge>
         </div>
-        <p className="text-sm text-gray-600">Due: {formatTime(task.due_date)}</p>
-        <p className="text-sm text-gray-600">Created: {new Date(task.created_at).toLocaleString()}</p>
+        <p className="text-sm text-gray-600">Due: {formatDateTime(task.due_date)}</p>
+        <p className="text-sm text-gray-600">Created: {formatDateTime(task.created_at)}</p>
         {task.completed_at && (
-          <p className="text-sm text-gray-600">Completed: {new Date(task.completed_at).toLocaleString()}</p>
+          <p className="text-sm text-gray-600">Completed: {formatDateTime(task.completed_at)}</p>
         )}
       </CardContent>
     </Card>

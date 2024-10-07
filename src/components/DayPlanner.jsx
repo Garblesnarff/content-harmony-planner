@@ -7,14 +7,15 @@ const DayPlanner = ({ tasks }) => {
   const priorityTasks = tasks.filter(task => task.priority === 'high' && task.status === 'pending').slice(0, 3);
   const todoTasks = tasks.filter(task => task.status === 'pending').slice(0, 5);
 
-  const timeSlots = Array.from({ length: 18 }, (_, i) => {
-    const hour = i + 6;
-    return hour <= 12 ? `${hour}:00 AM` : `${hour - 12}:00 PM`;
+  const timeSlots = Array.from({ length: 24 }, (_, i) => {
+    const hour = i;
+    return hour < 12 ? `${hour === 0 ? 12 : hour}:00 AM` : `${hour === 12 ? 12 : hour - 12}:00 PM`;
   });
 
   const getTasksForTime = (time) => {
     return tasks.filter(task => {
-      const taskTime = new Date(task.due_date).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+      const taskDate = new Date(task.due_date);
+      const taskTime = taskDate.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
       return taskTime === time;
     });
   };

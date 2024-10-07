@@ -15,7 +15,7 @@ const TaskForm = ({ onAddTask, initialDate }) => {
       description: '',
       content_type: '',
       priority: '',
-      due_date: initialDate && initialDate >= today ? initialDate : today,
+      due_date: initialDate && new Date(initialDate) >= today ? new Date(initialDate) : today,
       due_time: '12:00',
     },
   });

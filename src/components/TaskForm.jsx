@@ -12,7 +12,7 @@ const TaskForm = ({ onAddTask, initialDate }) => {
       description: '',
       content_type: '',
       priority: '',
-      due_date: initialDate || new Date(),
+      due_date: initialDate ? new Date(initialDate) : new Date(),
       due_time: '12:00',
     },
   });
@@ -21,6 +21,12 @@ const TaskForm = ({ onAddTask, initialDate }) => {
     const combinedDateTime = new Date(data.due_date);
     const [hours, minutes] = data.due_time.split(':');
     combinedDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+
+    // Ensure the date is valid before converting to ISO string
+    if (isNaN(combinedDateTime.getTime())) {
+      console.error('Invalid date');
+      return;
+    }
 
     onAddTask({
       description: data.description,
@@ -100,13 +106,12 @@ const TaskForm = ({ onAddTask, initialDate }) => {
               <FormLabel>Due Date</FormLabel>
               <DatePicker
                 date={field.value}
-                onDateChange={field.onChange}
+                onDateChange={(date) => field.onChange(date || new Date())}
               />
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="due_time"
@@ -120,7 +125,6 @@ const TaskForm = ({ onAddTask, initialDate }) => {
             </FormItem>
           )}
         />
-
         <Button type="submit">Add Task</Button>
       </form>
     </Form>

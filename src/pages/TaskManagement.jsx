@@ -68,7 +68,7 @@ const TaskManagement = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <h2 className="text-xl font-semibold mb-4">Add New Task</h2>
-          <TaskForm onAddTask={handleAddTask} />
+          <TaskForm onAddTask={handleAddTask} initialDate={new Date()} />
         </div>
         <div>
           <h2 className="text-xl font-semibold mb-4">Task List</h2>

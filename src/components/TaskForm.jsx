@@ -6,13 +6,13 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
 
-const TaskForm = ({ onAddTask }) => {
+const TaskForm = ({ onAddTask, initialDate }) => {
   const form = useForm({
     defaultValues: {
       description: '',
       content_type: '',
       priority: '',
-      due_date: null,
+      due_date: initialDate || new Date(),
     },
   });
 

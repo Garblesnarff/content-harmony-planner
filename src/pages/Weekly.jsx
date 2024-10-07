@@ -3,13 +3,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import TaskForm from '../components/TaskForm';
+import { useTasks } from '../integrations/supabase/hooks/useTasks';
 
 const WeeklyPage = () => {
   const [currentWeek, setCurrentWeek] = useState([]);
-  const [tasks, setTasks] = useState({});
+  const { data: tasks, isLoading, isError } = useTasks();
+  const today = new Date();
 
   useEffect(() => {
-    const today = new Date(2024, 9, 5); // October 5th 2024
     const week = getWeekDates(today);
     setCurrentWeek(week);
   }, []);
@@ -25,29 +26,21 @@ const WeeklyPage = () => {
     return week;
   };
 
-  const handleAddTask = (newTask) => {
-    const taskDate = new Date(newTask.dueDate).toDateString();
-    setTasks(prevTasks => ({
-      ...prevTasks,
-      [taskDate]: [...(prevTasks[taskDate] || []), newTask]
-    }));
-  };
-
-  const handleRemoveTask = (taskDate, taskId) => {
-    setTasks(prevTasks => ({
-      ...prevTasks,
-      [taskDate]: prevTasks[taskDate].filter(task => task.id !== taskId)
-    }));
+  const getTasksForDate = (date) => {
+    if (!tasks) return [];
+    return tasks.filter(task => {
+      const taskDate = new Date(task.due_date);
+      return taskDate.toDateString() === date.toDateString();
+    });
   };
 
   const renderTasksForDate = (date) => {
-    const tasksForDate = tasks[date.toDateString()] || [];
+    const tasksForDate = getTasksForDate(date);
     return (
       <div className="mt-2 space-y-2">
         {tasksForDate.map(task => (
           <div key={task.id} className="flex justify-between items-center p-2 bg-white rounded-md shadow hover:shadow-md transition-shadow">
-            <span className="text-sm">{task.title}</span>
-            <Button variant="destructive" size="sm" onClick={() => handleRemoveTask(date.toDateString(), task.id)} className="hover-glow">Remove</Button>
+            <span className="text-sm">{task.description}</span>
           </div>
         ))}
         <Dialog>
@@ -58,19 +51,22 @@ const WeeklyPage = () => {
             <DialogHeader>
               <DialogTitle>Add Task for {date.toDateString()}</DialogTitle>
             </DialogHeader>
-            <TaskForm onAddTask={handleAddTask} initialDate={date.toISOString().split('T')[0]} />
+            <TaskForm onAddTask={(newTask) => console.log(newTask)} initialDate={date} />
           </DialogContent>
         </Dialog>
       </div>
     );
   };
 
+  if (isLoading) return <div>Loading tasks...</div>;
+  if (isError) return <div>Error loading tasks</div>;
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Weekly View</h1>
       <div className="grid grid-cols-7 gap-4">
         {currentWeek.map((date, index) => (
-          <Card key={index} className="overflow-hidden card-hover">
+          <Card key={index} className={`overflow-hidden card-hover ${date < today ? 'opacity-50' : ''}`}>
             <CardContent className="p-4">
               <h2 className="text-lg font-semibold mb-2 text-primary">{date.toLocaleDateString('en-US', { weekday: 'short' })}</h2>
               <p className="text-sm mb-2 text-gray-600">{date.toLocaleDateString()}</p>

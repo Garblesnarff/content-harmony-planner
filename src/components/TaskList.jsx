@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { format } from 'date-fns';
 
 const TaskList = ({ tasks, onUpdateTask, onDeleteTask }) => {
   const getPriorityColor = (priority) => {
@@ -17,6 +18,11 @@ const TaskList = ({ tasks, onUpdateTask, onDeleteTask }) => {
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return format(date, 'MM/dd/yyyy, h:mm a');
+  };
+
   return (
     <div className="space-y-4">
       {tasks.map((task) => (
@@ -30,10 +36,10 @@ const TaskList = ({ tasks, onUpdateTask, onDeleteTask }) => {
               <Badge className={getPriorityColor(task.priority)}>{task.priority}</Badge>
               <Badge variant="outline">{task.status}</Badge>
             </div>
-            <p className="text-sm text-gray-600">Due: {task.due_date ? new Date(task.due_date).toLocaleDateString() : 'Not set'}</p>
-            <p className="text-sm text-gray-600">Created: {new Date(task.created_at).toLocaleString()}</p>
+            <p className="text-sm text-gray-600">Due: {formatDate(task.due_date)}</p>
+            <p className="text-sm text-gray-600">Created: {formatDate(task.created_at)}</p>
             {task.completed_at && (
-              <p className="text-sm text-gray-600">Completed: {new Date(task.completed_at).toLocaleString()}</p>
+              <p className="text-sm text-gray-600">Completed: {formatDate(task.completed_at)}</p>
             )}
           </CardContent>
           <CardFooter className="bg-gray-50 justify-between">

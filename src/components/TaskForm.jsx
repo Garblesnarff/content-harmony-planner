@@ -19,9 +19,13 @@ const TaskForm = ({ onAddTask, initialDate }) => {
 
   const onSubmit = (data) => {
     const now = new Date();
-    const combinedDateTime = new Date(data.due_date);
     const [hours, minutes] = data.due_time.split(':');
-    combinedDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+    
+    // Create a new Date object from the selected date
+    const combinedDateTime = new Date(data.due_date);
+    
+    // Set the time on the combined date
+    combinedDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
 
     // Ensure the due date is not in the past
     if (combinedDateTime < now) {
@@ -29,11 +33,14 @@ const TaskForm = ({ onAddTask, initialDate }) => {
       return;
     }
 
+    // Format the date as an ISO string, but only include the date and time parts
+    const formattedDate = combinedDateTime.toISOString().split('.')[0] + "Z";
+
     onAddTask({
       description: data.description,
       content_type: data.content_type,
       priority: data.priority,
-      due_date: combinedDateTime.toISOString(),
+      due_date: formattedDate,
       status: 'pending',
     });
     form.reset();

@@ -34,7 +34,7 @@ const TaskForm = ({ onAddTask, initialDate }) => {
     }
 
     // Format the date as an ISO string, but only include the date and time parts
-    const formattedDate = combinedDateTime.toISOString().split('.')[0] + "Z";
+    const formattedDate = combinedDateTime.toISOString().slice(0, 19) + "Z";
 
     onAddTask({
       description: data.description,

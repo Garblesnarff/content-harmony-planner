@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 const TaskCard = ({ task }) => {
   const getPriorityColor = (priority) => {
@@ -18,7 +18,7 @@ const TaskCard = ({ task }) => {
   };
 
   const formatDateTime = (dateString) => {
-    const date = new Date(dateString);
+    const date = parseISO(dateString);
     return format(date, 'MMM d, yyyy h:mm a');
   };
 

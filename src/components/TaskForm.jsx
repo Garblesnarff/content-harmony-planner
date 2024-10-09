@@ -6,7 +6,6 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
 import { format, parseISO, setHours, setMinutes } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
 
 const TaskForm = ({ onAddTask, initialDate }) => {
   const form = useForm({
@@ -39,7 +38,6 @@ const TaskForm = ({ onAddTask, initialDate }) => {
     // Use a try-catch block to handle potential invalid date errors
     try {
       // Convert the local date to UTC
-      const userTimeZone = 'America/Chicago'; // Central Time
       const utcDate = new Date(combinedDateTime.toUTCString());
 
       // Format the date in ISO format

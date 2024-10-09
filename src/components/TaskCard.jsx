@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format, parseISO } from 'date-fns';
-import { zonedTimeToUtc } from 'date-fns-tz';
+import { formatInTimeZone } from 'date-fns-tz';
 
 const TaskCard = ({ task }) => {
   const getPriorityColor = (priority) => {
@@ -19,10 +19,8 @@ const TaskCard = ({ task }) => {
   };
 
   const formatDateTime = (dateString) => {
-    const date = parseISO(dateString);
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const zonedDate = zonedTimeToUtc(date, userTimeZone);
-    return format(zonedDate, 'MM/dd/yyyy, h:mm a');
+    return formatInTimeZone(parseISO(dateString), userTimeZone, 'MM/dd/yyyy, h:mm a');
   };
 
   return (

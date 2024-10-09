@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
+import { format, parseISO } from 'date-fns';
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 const TaskForm = ({ onAddTask, initialDate }) => {
   const form = useForm({
@@ -35,8 +37,11 @@ const TaskForm = ({ onAddTask, initialDate }) => {
 
     // Use a try-catch block to handle potential invalid date errors
     try {
-      // Store the date as is, without converting to UTC
-      const isoString = combinedDateTime.toISOString();
+      // Convert the local date to UTC while preserving the intended time
+      const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const utcDate = zonedTimeToUtc(combinedDateTime, userTimeZone);
+      const isoString = utcDate.toISOString();
+
       onAddTask({
         description: data.description,
         content_type: data.content_type,

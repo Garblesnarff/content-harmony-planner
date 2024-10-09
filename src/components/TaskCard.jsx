@@ -19,7 +19,8 @@ const TaskCard = ({ task }) => {
 
   const formatDateTime = (dateString) => {
     const date = parseISO(dateString);
-    return format(date, 'MMM d, yyyy h:mm a');
+    // Use the user's local timezone when formatting the date
+    return format(date, 'MM/dd/yyyy, h:mm a');
   };
 
   return (

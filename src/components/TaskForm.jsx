@@ -35,9 +35,8 @@ const TaskForm = ({ onAddTask, initialDate }) => {
 
     // Use a try-catch block to handle potential invalid date errors
     try {
-      // Convert to UTC to avoid timezone issues
-      const utcDate = new Date(combinedDateTime.toUTCString());
-      const isoString = utcDate.toISOString();
+      // Store the date as is, without converting to UTC
+      const isoString = combinedDateTime.toISOString();
       onAddTask({
         description: data.description,
         content_type: data.content_type,

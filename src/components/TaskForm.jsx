@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
-import { format, parseISO } from 'date-fns';
-import { formatInTimeZone } from 'date-fns-tz';
+import { format, parseISO, setHours, setMinutes } from 'date-fns';
+import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 
 const TaskForm = ({ onAddTask, initialDate }) => {
   const form = useForm({
@@ -23,10 +23,11 @@ const TaskForm = ({ onAddTask, initialDate }) => {
     const [hours, minutes] = data.due_time.split(':');
     
     // Create a new Date object from the selected date
-    const combinedDateTime = new Date(data.due_date);
+    let combinedDateTime = new Date(data.due_date);
     
     // Set the time on the combined date
-    combinedDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+    combinedDateTime = setHours(combinedDateTime, parseInt(hours, 10));
+    combinedDateTime = setMinutes(combinedDateTime, parseInt(minutes, 10));
 
     // Ensure the due date is not in the past
     const now = new Date();
@@ -37,12 +38,12 @@ const TaskForm = ({ onAddTask, initialDate }) => {
 
     // Use a try-catch block to handle potential invalid date errors
     try {
-      // Convert the local date to ISO string
-      const isoString = combinedDateTime.toISOString();
+      // Convert the local date to UTC
+      const userTimeZone = 'America/Chicago'; // Central Time
+      const utcDate = zonedTimeToUtc(combinedDateTime, userTimeZone);
 
-      // Format the date in the user's timezone
-      const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const formattedDate = formatInTimeZone(combinedDateTime, userTimeZone, "yyyy-MM-dd'T'HH:mm:ssXXX");
+      // Format the date in ISO format
+      const formattedDate = utcDate.toISOString();
 
       onAddTask({
         description: data.description,

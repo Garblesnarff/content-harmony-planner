@@ -33,14 +33,21 @@ const TaskForm = ({ onAddTask, initialDate }) => {
       return;
     }
 
-    onAddTask({
-      description: data.description,
-      content_type: data.content_type,
-      priority: data.priority,
-      due_date: combinedDateTime.toISOString(),
-      status: 'pending',
-    });
-    form.reset();
+    // Use a try-catch block to handle potential invalid date errors
+    try {
+      const isoString = combinedDateTime.toISOString();
+      onAddTask({
+        description: data.description,
+        content_type: data.content_type,
+        priority: data.priority,
+        due_date: isoString,
+        status: 'pending',
+      });
+      form.reset();
+    } catch (error) {
+      console.error('Error creating date:', error);
+      form.setError('due_date', { type: 'manual', message: 'Invalid date/time combination' });
+    }
   };
 
   return (

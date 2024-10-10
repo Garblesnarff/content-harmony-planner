@@ -11,13 +11,18 @@ const TaskForm = ({ onAddTask }) => {
       description: '',
       content_type: '',
       priority: '',
-      due_date: new Date().toISOString().slice(0, 16),
+      due_date: new Date().toISOString().slice(0, 16), // Set to current date and time
     },
   });
 
   const onSubmit = (data) => {
+    // Ensure the due_date is in ISO format
+    const dueDate = new Date(data.due_date);
+    const isoDate = dueDate.toISOString();
+
     onAddTask({
       ...data,
+      due_date: isoDate,
       status: 'pending',
     });
     form.reset();

@@ -19,8 +19,19 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
+    const now = new Date();
+    if (date < now) {
+      return null; // Return null for past dates
+    }
     return date.toLocaleString();
   };
+
+  const formattedDueDate = formatDateTime(task.due_date);
+
+  // Don't render the card if the due date is in the past
+  if (!formattedDueDate) {
+    return null;
+  }
 
   return (
     <Card className="overflow-hidden">
@@ -33,7 +44,7 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
           <Badge className={getPriorityColor(task.priority)}>{task.priority}</Badge>
           <Badge variant="outline">{task.status}</Badge>
         </div>
-        <p className="text-sm text-gray-600">Due: {formatDateTime(task.due_date)}</p>
+        <p className="text-sm text-gray-600">Due: {formattedDueDate}</p>
         {task.completed_at && (
           <p className="text-sm text-gray-600">Completed: {formatDateTime(task.completed_at)}</p>
         )}

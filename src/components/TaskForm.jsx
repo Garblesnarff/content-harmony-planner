@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
-import { format, parseISO, setHours, setMinutes } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 const TaskForm = ({ onAddTask, initialDate }) => {
   const form = useForm({
@@ -25,8 +25,7 @@ const TaskForm = ({ onAddTask, initialDate }) => {
     let combinedDateTime = new Date(data.due_date);
     
     // Set the time on the combined date
-    combinedDateTime = setHours(combinedDateTime, parseInt(hours, 10));
-    combinedDateTime = setMinutes(combinedDateTime, parseInt(minutes, 10));
+    combinedDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
 
     // Ensure the due date is not in the past
     const now = new Date();
@@ -35,26 +34,14 @@ const TaskForm = ({ onAddTask, initialDate }) => {
       return;
     }
 
-    // Use a try-catch block to handle potential invalid date errors
-    try {
-      // Convert the local date to UTC
-      const utcDate = new Date(combinedDateTime.toUTCString());
-
-      // Format the date in ISO format
-      const formattedDate = utcDate.toISOString();
-
-      onAddTask({
-        description: data.description,
-        content_type: data.content_type,
-        priority: data.priority,
-        due_date: formattedDate,
-        status: 'pending',
-      });
-      form.reset();
-    } catch (error) {
-      console.error('Error creating date:', error);
-      form.setError('due_date', { type: 'manual', message: 'Invalid date/time combination' });
-    }
+    onAddTask({
+      description: data.description,
+      content_type: data.content_type,
+      priority: data.priority,
+      due_date: combinedDateTime.toISOString(),
+      status: 'pending',
+    });
+    form.reset();
   };
 
   return (

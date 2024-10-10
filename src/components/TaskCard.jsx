@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { format, parseISO } from 'date-fns';
-import { formatInTimeZone } from 'date-fns-tz';
+import { Button } from "@/components/ui/button";
+import { format } from 'date-fns';
 
-const TaskCard = ({ task }) => {
+const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'low':
@@ -19,8 +19,8 @@ const TaskCard = ({ task }) => {
   };
 
   const formatDateTime = (dateString) => {
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return formatInTimeZone(parseISO(dateString), userTimeZone, 'MM/dd/yyyy, h:mm a');
+    const date = new Date(dateString);
+    return format(date, 'MM/dd/yyyy, h:mm a');
   };
 
   return (
@@ -39,6 +39,20 @@ const TaskCard = ({ task }) => {
         {task.completed_at && (
           <p className="text-sm text-gray-600">Completed: {formatDateTime(task.completed_at)}</p>
         )}
+        <div className="mt-4 space-x-2">
+          <Button 
+            variant="outline" 
+            onClick={() => onUpdateTask({ ...task, status: task.status === 'completed' ? 'pending' : 'completed' })}
+          >
+            {task.status === 'completed' ? 'Mark as Pending' : 'Mark as Completed'}
+          </Button>
+          <Button 
+            variant="destructive" 
+            onClick={() => onDeleteTask(task.id)}
+          >
+            Delete
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

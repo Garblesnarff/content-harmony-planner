@@ -11,18 +11,13 @@ const TaskForm = ({ onAddTask }) => {
       description: '',
       content_type: '',
       priority: '',
-      due_date: new Date().toISOString().split('T')[0],
-      due_time: '12:00',
+      due_date: new Date().toISOString().slice(0, 16),
     },
   });
 
   const onSubmit = (data) => {
-    const { due_date, due_time } = data;
-    const combinedDateTime = `${due_date}T${due_time}:00`;
-
     onAddTask({
       ...data,
-      due_date: combinedDateTime,
       status: 'pending',
     });
     form.reset();
@@ -93,22 +88,9 @@ const TaskForm = ({ onAddTask }) => {
           name="due_date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Due Date</FormLabel>
+              <FormLabel>Due Date and Time</FormLabel>
               <FormControl>
-                <Input type="date" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="due_time"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Due Time</FormLabel>
-              <FormControl>
-                <Input type="time" {...field} />
+                <Input type="datetime-local" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

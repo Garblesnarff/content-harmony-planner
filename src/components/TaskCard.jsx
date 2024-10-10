@@ -19,7 +19,7 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString(); // This will use the user's local settings
+    return date.toLocaleString();
   };
 
   return (

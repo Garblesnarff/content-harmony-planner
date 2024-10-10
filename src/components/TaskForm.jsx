@@ -4,41 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DatePicker } from "@/components/ui/date-picker";
-import { format, parseISO } from 'date-fns';
 
-const TaskForm = ({ onAddTask, initialDate }) => {
+const TaskForm = ({ onAddTask }) => {
   const form = useForm({
     defaultValues: {
       description: '',
       content_type: '',
       priority: '',
-      due_date: initialDate ? new Date(initialDate) : new Date(),
+      due_date: new Date().toISOString().split('T')[0],
       due_time: '12:00',
     },
   });
 
   const onSubmit = (data) => {
-    const [hours, minutes] = data.due_time.split(':');
-    
-    // Create a new Date object from the selected date
-    let combinedDateTime = new Date(data.due_date);
-    
-    // Set the time on the combined date
-    combinedDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
-
-    // Ensure the due date is not in the past
-    const now = new Date();
-    if (combinedDateTime < now) {
-      form.setError('due_date', { type: 'manual', message: 'Due date cannot be in the past' });
-      return;
-    }
+    const { due_date, due_time } = data;
+    const combinedDateTime = `${due_date}T${due_time}:00`;
 
     onAddTask({
-      description: data.description,
-      content_type: data.content_type,
-      priority: data.priority,
-      due_date: combinedDateTime.toISOString(),
+      ...data,
+      due_date: combinedDateTime,
       status: 'pending',
     });
     form.reset();
@@ -108,13 +92,11 @@ const TaskForm = ({ onAddTask, initialDate }) => {
           control={form.control}
           name="due_date"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
+            <FormItem>
               <FormLabel>Due Date</FormLabel>
-              <DatePicker
-                date={field.value}
-                onDateChange={field.onChange}
-                disabled={(date) => date < new Date()}
-              />
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

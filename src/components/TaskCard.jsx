@@ -2,7 +2,6 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { format } from 'date-fns';
 
 const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
   const getPriorityColor = (priority) => {
@@ -20,7 +19,7 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
-    return format(date, 'MM/dd/yyyy, h:mm a');
+    return date.toLocaleString(); // This will use the user's local settings
   };
 
   return (
@@ -35,7 +34,6 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
           <Badge variant="outline">{task.status}</Badge>
         </div>
         <p className="text-sm text-gray-600">Due: {formatDateTime(task.due_date)}</p>
-        <p className="text-sm text-gray-600">Created: {formatDateTime(task.created_at)}</p>
         {task.completed_at && (
           <p className="text-sm text-gray-600">Completed: {formatDateTime(task.completed_at)}</p>
         )}

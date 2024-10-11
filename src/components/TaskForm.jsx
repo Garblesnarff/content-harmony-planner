@@ -16,10 +16,13 @@ const TaskForm = ({ onAddTask }) => {
   });
 
   const onSubmit = (data) => {
-    onAddTask({
+    // Ensure the due_date is sent as an ISO string
+    const taskData = {
       ...data,
+      due_date: new Date(data.due_date).toISOString(),
       status: 'pending',
-    });
+    };
+    onAddTask(taskData);
     form.reset();
   };
 

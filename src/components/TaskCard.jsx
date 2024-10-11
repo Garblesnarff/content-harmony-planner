@@ -41,6 +41,7 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
           <Badge variant="outline">{task.status}</Badge>
         </div>
         <p className="text-sm text-gray-600">Due: {formatDateTime(task.due_date)}</p>
+        <p className="text-sm text-gray-600">Created: {formatDateTime(task.created_at)}</p>
         {task.completed_at && (
           <p className="text-sm text-gray-600">Completed: {formatDateTime(task.completed_at)}</p>
         )}

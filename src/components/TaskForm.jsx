@@ -16,13 +16,13 @@ const TaskForm = ({ onAddTask }) => {
   });
 
   const onSubmit = (data) => {
-    // Ensure the due_date is in ISO format
-    const dueDate = new Date(data.due_date);
-    const isoDate = dueDate.toISOString();
+    // Convert the local date to UTC
+    const localDate = new Date(data.due_date);
+    const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
 
     onAddTask({
       ...data,
-      due_date: isoDate,
+      due_date: utcDate.toISOString(),
       status: 'pending',
     });
     form.reset();

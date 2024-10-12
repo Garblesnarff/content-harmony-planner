@@ -16,7 +16,14 @@ export const useTasks = () => useQuery({
     queryKey: ['tasks'],
     queryFn: async () => {
         const data = await fromSupabase(supabase.from('tasks').select('*'));
-        console.log('Raw tasks data from server:', data); // Log raw data
+        console.log('Raw tasks data from server:', data);
+        data.forEach(task => {
+            console.log(`Task ${task.id}:`);
+            console.log('  description:', task.description);
+            console.log('  due_date:', task.due_date);
+            console.log('  created_at:', task.created_at);
+            console.log('  completed_at:', task.completed_at);
+        });
         return data;
     },
 });
@@ -25,8 +32,10 @@ export const useAddTask = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (newTask) => {
-            console.log('Adding new task:', newTask); // Log the task being added
-            return fromSupabase(supabase.from('tasks').insert([newTask]));
+            console.log('Adding new task:', newTask);
+            const result = await fromSupabase(supabase.from('tasks').insert([newTask]));
+            console.log('Result of adding task:', result);
+            return result;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tasks'] });

@@ -16,10 +16,10 @@ const TaskForm = ({ onAddTask }) => {
   });
 
   const onSubmit = (data) => {
-    // Use the date string directly from the input
+    console.log('Submitting due_date:', data.due_date); // Log the due_date before submission
     const taskData = {
       ...data,
-      due_date: data.due_date, // Don't convert, use as is
+      due_date: data.due_date,
       status: 'pending',
     };
     onAddTask(taskData);

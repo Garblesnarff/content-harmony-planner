@@ -14,13 +14,20 @@ export const useTask = (id) => useQuery({
 
 export const useTasks = () => useQuery({
     queryKey: ['tasks'],
-    queryFn: () => fromSupabase(supabase.from('tasks').select('*')),
+    queryFn: async () => {
+        const data = await fromSupabase(supabase.from('tasks').select('*'));
+        console.log('Raw tasks data from server:', data); // Log raw data
+        return data;
+    },
 });
 
 export const useAddTask = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newTask) => fromSupabase(supabase.from('tasks').insert([newTask])),
+        mutationFn: async (newTask) => {
+            console.log('Adding new task:', newTask); // Log the task being added
+            return fromSupabase(supabase.from('tasks').insert([newTask]));
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tasks'] });
         },

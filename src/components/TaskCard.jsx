@@ -17,11 +17,10 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
     }
   };
 
-  const formatDateTime = (dateString) => {
-    if (!dateString) return 'Not set';
-    // Display the date and time exactly as stored, without any conversion
-    return dateString.replace('T', ' ');
-  };
+  // Log raw date strings
+  console.log('Raw due_date:', task.due_date);
+  console.log('Raw created_at:', task.created_at);
+  console.log('Raw completed_at:', task.completed_at);
 
   return (
     <Card className="overflow-hidden">
@@ -34,10 +33,10 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
           <Badge className={getPriorityColor(task.priority)}>{task.priority}</Badge>
           <Badge variant="outline">{task.status}</Badge>
         </div>
-        <p className="text-sm text-gray-600">Due: {formatDateTime(task.due_date)}</p>
-        <p className="text-sm text-gray-600">Created: {formatDateTime(task.created_at)}</p>
+        <p className="text-sm text-gray-600">Due: {task.due_date || 'Not set'}</p>
+        <p className="text-sm text-gray-600">Created: {task.created_at || 'Not set'}</p>
         {task.completed_at && (
-          <p className="text-sm text-gray-600">Completed: {formatDateTime(task.completed_at)}</p>
+          <p className="text-sm text-gray-600">Completed: {task.completed_at}</p>
         )}
         <div className="mt-4 space-x-2">
           <Button 

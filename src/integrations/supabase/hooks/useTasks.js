@@ -33,7 +33,13 @@ export const useAddTask = () => {
     return useMutation({
         mutationFn: async (newTask) => {
             console.log('Adding new task:', newTask);
-            const result = await fromSupabase(supabase.from('tasks').insert([newTask]));
+            // Format the due_date to ISO string before sending to Supabase
+            const formattedTask = {
+                ...newTask,
+                due_date: new Date(newTask.due_date).toISOString(),
+            };
+            console.log('Formatted task being sent:', formattedTask);
+            const result = await fromSupabase(supabase.from('tasks').insert([formattedTask]));
             console.log('Result of adding task:', result);
             return result;
         },

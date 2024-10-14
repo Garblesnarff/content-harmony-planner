@@ -11,15 +11,14 @@ const TaskForm = ({ onAddTask }) => {
       description: '',
       content_type: '',
       priority: '',
-      due_date: new Date().toISOString().slice(0, 16), // Set to current date and time
+      due_date: '',
     },
   });
 
   const onSubmit = (data) => {
-    console.log('Submitting due_date:', data.due_date); // Log the due_date before submission
+    console.log('Submitting due_date:', data.due_date);
     const taskData = {
       ...data,
-      due_date: data.due_date,
       status: 'pending',
     };
     onAddTask(taskData);

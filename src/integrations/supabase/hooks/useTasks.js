@@ -24,10 +24,7 @@ export const useTasks = () => useQuery({
             console.log('  created_at:', task.created_at);
             console.log('  completed_at:', task.completed_at);
         });
-        return data.map(task => ({
-            ...task,
-            due_date: task.due_date ? new Date(task.due_date).toISOString() : null
-        }));
+        return data;
     },
 });
 
@@ -36,13 +33,8 @@ export const useAddTask = () => {
     return useMutation({
         mutationFn: async (newTask) => {
             console.log('Adding new task:', newTask);
-            // Ensure due_date is in ISO format
-            const formattedTask = {
-                ...newTask,
-                due_date: newTask.due_date ? new Date(newTask.due_date).toISOString() : null,
-            };
-            console.log('Formatted task being sent:', formattedTask);
-            const result = await fromSupabase(supabase.from('tasks').insert([formattedTask]));
+            // Use the due_date directly as provided by the user
+            const result = await fromSupabase(supabase.from('tasks').insert([newTask]));
             console.log('Result of adding task:', result);
             return result;
         },
@@ -55,13 +47,7 @@ export const useAddTask = () => {
 export const useUpdateTask = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, ...updateData }) => {
-            const formattedData = {
-                ...updateData,
-                due_date: updateData.due_date ? new Date(updateData.due_date).toISOString() : null,
-            };
-            return fromSupabase(supabase.from('tasks').update(formattedData).eq('id', id));
-        },
+        mutationFn: ({ id, ...updateData }) => fromSupabase(supabase.from('tasks').update(updateData).eq('id', id)),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tasks'] });
         },

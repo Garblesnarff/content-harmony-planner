@@ -17,10 +17,18 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
     }
   };
 
-  // Log raw date strings
-  console.log('Raw due_date:', task.due_date);
-  console.log('Raw created_at:', task.created_at);
-  console.log('Raw completed_at:', task.completed_at);
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Not set';
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
 
   return (
     <Card className="overflow-hidden">
@@ -33,10 +41,10 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
           <Badge className={getPriorityColor(task.priority)}>{task.priority}</Badge>
           <Badge variant="outline">{task.status}</Badge>
         </div>
-        <p className="text-sm text-gray-600">Due: {task.due_date || 'Not set'}</p>
-        <p className="text-sm text-gray-600">Created: {task.created_at || 'Not set'}</p>
+        <p className="text-sm text-gray-600">Due: {formatDate(task.due_date)}</p>
+        <p className="text-sm text-gray-600">Created: {formatDate(task.created_at)}</p>
         {task.completed_at && (
-          <p className="text-sm text-gray-600">Completed: {task.completed_at}</p>
+          <p className="text-sm text-gray-600">Completed: {formatDate(task.completed_at)}</p>
         )}
         <div className="mt-4 space-x-2">
           <Button 

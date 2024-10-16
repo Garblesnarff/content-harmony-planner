@@ -16,10 +16,10 @@ const TaskForm = ({ onAddTask }) => {
   });
 
   const onSubmit = (data) => {
-    console.log('Submitting due_date:', data.due_date);
     const taskData = {
       ...data,
-      status: 'pending',
+      status: 'upcoming',
+      due_date: new Date(data.due_date).toISOString(), // Convert to ISO string
     };
     onAddTask(taskData);
     form.reset();

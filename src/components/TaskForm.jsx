@@ -19,7 +19,7 @@ const TaskForm = ({ onAddTask }) => {
     const taskData = {
       ...data,
       status: 'upcoming',
-      due_date: new Date(data.due_date).toISOString(), // Convert to ISO string
+      due_date: data.due_date, // Store the date string as is
     };
     onAddTask(taskData);
     form.reset();

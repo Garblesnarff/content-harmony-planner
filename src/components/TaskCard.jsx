@@ -22,7 +22,8 @@ const TaskCard = ({ task, onUpdateTask }) => {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true
+      hour12: true,
+      timeZone: 'UTC' // Ensure we're using UTC
     });
   };
 

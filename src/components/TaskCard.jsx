@@ -2,8 +2,9 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock } from 'lucide-react';
+import { format } from 'date-fns';
 
-const TaskCard = ({ task, onUpdateTask }) => {
+const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'low': return 'bg-green-500';
@@ -16,15 +17,7 @@ const TaskCard = ({ task, onUpdateTask }) => {
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-      timeZone: 'UTC' // Ensure we're using UTC
-    });
+    return format(date, 'MMM d, yyyy h:mm a');
   };
 
   return (
@@ -43,6 +36,12 @@ const TaskCard = ({ task, onUpdateTask }) => {
             </div>
           )}
         </div>
+        <button 
+          onClick={() => onDeleteTask(task.id)} 
+          className="mt-2 text-red-500 text-xs hover:text-red-700"
+        >
+          Delete
+        </button>
       </CardContent>
     </Card>
   );

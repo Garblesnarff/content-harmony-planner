@@ -2,9 +2,8 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock } from 'lucide-react';
-import { Button } from "@/components/ui/button";
 
-const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
+const TaskCard = ({ task, onUpdateTask }) => {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'low': return 'bg-green-500';
@@ -24,7 +23,7 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
       hour: '2-digit',
       minute: '2-digit',
       hour12: true,
-      timeZone: 'America/Chicago' // Central Time Zone
+      timeZone: 'UTC' // Ensure we're using UTC
     });
   };
 
@@ -44,14 +43,6 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
             </div>
           )}
         </div>
-        <Button 
-          variant="destructive" 
-          size="sm" 
-          className="mt-2"
-          onClick={() => onDeleteTask(task.id)}
-        >
-          Delete
-        </Button>
       </CardContent>
     </Card>
   );

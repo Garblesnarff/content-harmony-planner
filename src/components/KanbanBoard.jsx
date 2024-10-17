@@ -2,7 +2,7 @@ import React from 'react';
 import { useTasks, useUpdateTask } from '../integrations/supabase/hooks/useTasks';
 import KanbanColumn from './KanbanColumn';
 
-const KanbanBoard = () => {
+const KanbanBoard = ({ onDeleteTask }) => {
   const { data: tasks, isLoading, isError } = useTasks();
   const updateTaskMutation = useUpdateTask();
 
@@ -35,6 +35,7 @@ const KanbanBoard = () => {
           title={column.title}
           tasks={getTasksForColumn(column.status)}
           onUpdateTask={handleUpdateTask}
+          onDeleteTask={onDeleteTask}
         />
       ))}
     </div>

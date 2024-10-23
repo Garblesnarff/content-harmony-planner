@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Calendar, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -36,12 +37,14 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
             </div>
           )}
         </div>
-        <button 
-          onClick={() => onDeleteTask(task.id)} 
-          className="mt-2 text-red-500 text-xs hover:text-red-700"
+        <Button 
+          variant="destructive" 
+          size="sm"
+          className="mt-2"
+          onClick={() => onDeleteTask && onDeleteTask(task.id)}
         >
           Delete
-        </button>
+        </Button>
       </CardContent>
     </Card>
   );

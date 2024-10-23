@@ -2,8 +2,7 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock } from 'lucide-react';
-import { format } from 'date-fns';
+import { Calendar } from 'lucide-react';
 
 const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
   const getPriorityColor = (priority) => {
@@ -17,9 +16,19 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
-    // Simply format the date string without any timezone conversion
-    const date = new Date(dateString);
-    return format(date, 'MMM d, yyyy h:mm a');
+    // Split the ISO string and take only the parts we need
+    const [datePart, timePart] = dateString.split('T');
+    const [year, month, day] = datePart.split('-');
+    const [hour, minute] = timePart.split(':');
+    
+    // Convert to 12-hour format
+    let hour12 = parseInt(hour);
+    const ampm = hour12 >= 12 ? 'PM' : 'AM';
+    hour12 = hour12 % 12 || 12;
+    
+    // Format the date using the original values
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${months[parseInt(month) - 1]} ${parseInt(day)}, ${year} ${hour12}:${minute} ${ampm}`;
   };
 
   return (

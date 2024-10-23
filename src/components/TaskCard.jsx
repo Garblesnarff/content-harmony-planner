@@ -3,7 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 
 const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
   const getPriorityColor = (priority) => {
@@ -17,8 +18,9 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
-    const date = new Date(dateString);
-    return format(date, 'MMM d, yyyy h:mm a');
+    // Use the user's timezone to format the date
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return formatInTimeZone(new Date(dateString), userTimeZone, 'MMM dd, yyyy h:mm a');
   };
 
   return (

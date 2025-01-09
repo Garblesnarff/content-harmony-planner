@@ -16,19 +16,29 @@ const TaskCard = ({ task, onUpdateTask, onDeleteTask }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
-    // Split the ISO string and take only the parts we need
-    const [datePart, timePart] = dateString.split('T');
-    const [year, month, day] = datePart.split('-');
-    const [hour, minute] = timePart.split(':');
     
-    // Convert to 12-hour format
-    let hour12 = parseInt(hour);
-    const ampm = hour12 >= 12 ? 'PM' : 'AM';
-    hour12 = hour12 % 12 || 12;
-    
-    // Format the date using the original values
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return `${months[parseInt(month) - 1]} ${parseInt(day)}, ${year} ${hour12}:${minute} ${ampm}`;
+    try {
+      // Split the ISO string and take only the parts we need
+      const [datePart, timePart] = dateString.split('T');
+      if (!datePart || !timePart) return dateString; // Return original string if split fails
+      
+      const [year, month, day] = datePart.split('-');
+      const [hour, minute] = timePart.split(':');
+      
+      if (!year || !month || !day || !hour || !minute) return dateString;
+      
+      // Convert to 12-hour format
+      let hour12 = parseInt(hour);
+      const ampm = hour12 >= 12 ? 'PM' : 'AM';
+      hour12 = hour12 % 12 || 12;
+      
+      // Format the date using the original values
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${months[parseInt(month) - 1]} ${parseInt(day)}, ${year} ${hour12}:${minute} ${ampm}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return dateString; // Return original string if formatting fails
+    }
   };
 
   return (
